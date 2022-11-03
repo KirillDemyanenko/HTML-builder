@@ -1,8 +1,7 @@
-const fs = require("fs"),
-  path = require("path");
-let stream = new fs.ReadStream(path.join(__dirname, "text.txt"));
+const fs = require("node:fs");
+const path = require("node:path");
+const stream = new fs.ReadStream(path.join(__dirname, "text.txt"));
 stream.on("readable", () => {
-  let data;
   while ((data = stream.read())) {
     console.log(data.toString());
   }
@@ -10,4 +9,4 @@ stream.on("readable", () => {
 stream.on("end", () => {
   console.log("end_of_file");
 });
-stream.on("error", (error) => console.log(error));
+stream.on("error", (error) => console.error(error));
