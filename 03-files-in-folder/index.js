@@ -1,21 +1,16 @@
 const fs = require("node:fs");
 const path = require("node:path");
 fs.readdir(path.join(__dirname, "/secret-folder"), (error, files) => {
-  if (error) throw error;
-  for (let file of files) {
-    let fileName = file.split(".");
+  files.forEach((file) => {
     fs.stat(
-      path.join(__dirname, "/secret-folder/" + file),
-      (error, fileStats) => {
-        if (error) throw error;
-        if (fileStats.isFile()) {
-          console.log(
-            `${fileName[0]} - ${fileName[1]} - ${(
-              fileStats["size"] / 1024
-            ).toFixed(3)}kb`
-          );
-        }
-      }
+      path.join(__dirname, "/secret-folder/", file),
+      (err, stat) =>
+        !stat.isFile() ||
+        console.log(
+          `${file.split(".").at(0)} - ${file.split(".").at(1)} - ${(
+            stat.size / 1024
+          ).toFixed(3)}kb`
+        )
     );
-  }
+  });
 });
