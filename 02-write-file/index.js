@@ -1,20 +1,14 @@
-const fs = require("fs");
-const path = require("path");
-fs.open(path.join(__dirname, "file.txt"), "w", (error) => {
-  console.log("Hello!");
-  if (error) throw error;
-  console.log(
-    "File created successfully!\n" +
-      'Enter text to write to file\n(Write "exit" for exit)'
-  );
-  process.stdin.on("data", (data) => {
-    if (data.toString().trim() === "exit") {
-      console.log("Bye!");
-      process.exit(0);
-    } else {
-      fs.appendFile(path.join(__dirname, "file.txt"), data, (error) => {
-        if (error) throw error;
-      });
-    }
-  });
+function stop(text) {
+  console.log(`\x1b[93m${text}\x1b[0m`);
+  process.exit();
+}
+process.on("SIGINT", () => {
+  stop("You pressed Ctrl+C. Goodbye!");
 });
+process.stdin.on("data", (data) => {
+  data.toString().trim() !== "exit" || stop("You typed 'exit'. Goodbye!");
+});
+process.stdin.pipe(
+  require("fs").createWriteStream(__dirname.concat("/file.txt"))
+);
+console.log("\x1b[32mHello! App starts! Enter text to write to filefsd\x1b[0m");
