@@ -4,16 +4,14 @@ fs.mkdir(path.join(__dirname, "/files-copy"), { recursive: true }, (error) => {
   if (error) throw error;
   fs.readdir(path.join(__dirname, "/files"), (error, files) => {
     if (error) throw error;
-    for (let file of files) {
+    files.forEach((file) => {
       fs.copyFile(
-        path.join(__dirname, "/files/" + file),
-        path.join(__dirname, "/files-copy/" + file),
+        path.join(__dirname, "/files/", file),
+        path.join(__dirname, "/files-copy/", file),
         (error) => {
-          if (error) {
-            throw error;
-          }
+          if (error) throw error;
         }
       );
-    }
+    });
   });
 });
